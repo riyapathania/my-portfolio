@@ -2,8 +2,11 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+interface AnimatedNameProps {
+  name: string;
+}
 
-export default function AnimatedName() {
+export default function AnimatedName({ name }: AnimatedNameProps) {
   return (
     <svg
       viewBox="0 0 800 200"
@@ -35,7 +38,7 @@ export default function AnimatedName() {
           },
         }}
       >
-        Harshitha Pathania
+       {name}
       </motion.text>
     </svg>
   );
