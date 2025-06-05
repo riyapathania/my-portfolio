@@ -1,17 +1,15 @@
-// src/app/page.tsx
 'use client';
 
 import { motion } from "framer-motion";
+import QuantumBackground from "../../components/QuantumBackground";
 import AnimatedName from "../../components/AnimatedName";
 import NavBar from "../../components/NavBar";
 import Chatbot from "../../components/Chatbot";
-import QuantumBackground from "../../components/QuantumBackground";
 
 export default function Home() {
-  console.log('QuantumBackground =', QuantumBackground);
-
   return (
     <main className="relative min-h-screen bg-[#0f0c29] overflow-hidden text-white font-sans">
+      {/* Background */}
       <QuantumBackground />
 
       {/* Navigation Bar */}
