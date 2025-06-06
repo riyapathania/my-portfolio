@@ -1,51 +1,52 @@
-// src/app/api/chat/route.ts
 import { NextResponse } from "next/server";
 
-// ✅ Hardcoded test key (for debugging only — DO NOT COMMIT TO GIT)
-const GROQ_API_KEY = "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";
-console.log("Using Groq Key:", GROQ_API_KEY.slice(0, 10) + "...");
-
 export async function POST(req: Request) {
+  console.log("📩 Chatbot API hit");
+
   const { prompt } = await req.json();
 
-  if (!prompt) {
-    return NextResponse.json({ error: "No prompt provided" }, { status: 400 });
+  // ✅ Load from .env.local (don't hardcode)
+  const apiKey = process.env.GROQ_API_KEY;
+  const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+
+  if (!apiKey) {
+    console.error("❌ Missing GROQ_API_KEY in .env.local");
+    return NextResponse.json(
+      { reply: "Server error: API key not configured." },
+      { status: 500 }
+    );
   }
+
+  const payload = {
+    model: "llama3-70b-8192", // ✅ Working Groq model
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.7,
+  };
 
   try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch(apiUrl, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${GROQ_API_KEY}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({
-        model: "llama3-8b-8192",
-        messages: [
-          {
-            role: "system",
-            content: "You are a helpful assistant inside a student portfolio. Respond to questions clearly and informatively.",
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 1024,
-      }),
+      body: JSON.stringify(payload),
     });
 
-    const result = await res.json();
-    console.log("Groq response:", JSON.stringify(result, null, 2));
+    const data = await res.json();
+    console.log("✅ Groq API response:", data);
 
-    const reply = result.choices?.[0]?.message?.content?.trim();
-    return NextResponse.json({
-      reply: reply || "⚠️ No response from LLaMA 3.",
-    });
-  } catch (err) {
-    console.error("Groq API error:", err);
-    return NextResponse.json({ error: "Groq API call failed." }, { status: 500 });
+    const reply = data.choices?.[0]?.message?.content ?? "No response received.";
+    return NextResponse.json({ reply });
+  } catch (error) {
+    console.error("❌ Groq API error:", error);
+    return NextResponse.json(
+      { reply: "Sorry, the chatbot is currently unavailable." },
+      { status: 500 }
+    );
   }
 }
+
+
+
 

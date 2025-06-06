@@ -1,42 +1,49 @@
 'use client';
 
-import { motion } from "framer-motion";
-import QuantumBackground from "../../components/QuantumBackground";
-import AnimatedName from "../../components/AnimatedName";
-import NavBar from "../../components/NavBar";
-import Chatbot from "../../components/Chatbot";
+import { motion } from 'framer-motion';
+import AnimatedName from '@/components/AnimatedName';
+import StarfieldBackground from '@/components/StarfieldBackground';
+import NavBar from '@/components/NavBar';
+import About from '@/components/About';
+import Projects from '@/components/Projects';
+import Experience from '@/components/Experience';
+import Contact from '@/components/Contact';
+import Chatbot from '@/components/Chatbot';
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#0f0c29] overflow-hidden text-white font-sans">
-      {/* Background */}
-      <QuantumBackground />
+    <main className="relative min-h-screen bg-[#0f0c29] text-white overflow-hidden">
+      {/* 🌌 Starfield (fixed and behind all content) */}
+      <StarfieldBackground />
 
-      {/* Navigation Bar */}
+      {/* 🧭 Navigation */}
       <NavBar />
 
-      {/* Central Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-6">
+      {/* 🎯 Hero Section */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 1.2 }}
+          className="space-y-6 w-full"
         >
           <AnimatedName name="Harshitha Pathania" />
-          <p className="mt-4 text-lg max-w-2xl mx-auto text-gray-300">
-            Exploring Intelligence, Mathematics, and the Future of Human-Machine Synergy.
+          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mt-4">
+            Investigating the mathematical underpinnings of intelligence and reimagining the collaborative potential between humans and intelligent systems.
           </p>
-        </motion.div>
 
-        {/* Chatbot Area */}
-        <div className="mt-12 w-full max-w-xl">
-          <h2 className="text-xl font-semibold mb-2">Ask Me Anything</h2>
-          <Chatbot />
-          <p className="text-xs text-gray-400 mt-2">
-            (Powered by RAG: ask anything about my background, projects, or quantum research.)
-          </p>
-        </div>
+          {/* 🤖 Embedded Chatbot */}
+          <div className="mt-6 w-full max-w-xl mx-auto">
+            <Chatbot />
+          </div>
+        </motion.div>
       </div>
+
+      {/* 📚 Sections */}
+      <About />
+      <Projects />
+      <Experience />
+      <Contact />
     </main>
   );
 }
