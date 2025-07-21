@@ -5,18 +5,20 @@ export async function POST(req: Request) {
 
   const { prompt } = await req.json();
 
-  if (!prompt) {
+  // ✅ Load from .env.local (don't hardcode)
+  const apiKey = process.env.GROQ_API_KEY;
+  const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+
+  if (!apiKey) {
+    console.error("❌ Missing GROQ_API_KEY in .env.local");
     return NextResponse.json(
-      { reply: "Missing prompt." },
-      { status: 400 }
+      { reply: "Server error: API key not configured." },
+      { status: 500 }
     );
   }
 
-  const apiKey = "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"; // Your GROQ API key
-  const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
-
   const payload = {
-    model: "llama3-70b-8192",
+    model: "llama3-70b-8192", // ✅ Working Groq model
     messages: [{ role: "user", content: prompt }],
     temperature: 0.7,
   };
@@ -32,18 +34,22 @@ export async function POST(req: Request) {
     });
 
     const data = await res.json();
-    console.log("✅ Groq response:", JSON.stringify(data, null, 2));
+    console.log("✅ Groq API response:", data);
 
-    const reply = data?.choices?.[0]?.message?.content?.trim();
-    return NextResponse.json({ reply: reply || "[No response from model]" });
-  } catch (err: any) {
-    console.error("❌ Error reaching Groq:", err);
+    const reply = data.choices?.[0]?.message?.content ?? "No response received.";
+    return NextResponse.json({ reply });
+  } catch (error) {
+    console.error("❌ Groq API error:", error);
     return NextResponse.json(
-      { reply: "Server error: " + err.message },
+      { reply: "Sorry, the chatbot is currently unavailable." },
       { status: 500 }
     );
   }
 }
+
+
+
+
 
 
 
