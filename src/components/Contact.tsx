@@ -48,7 +48,7 @@ export default function Contact() {
 
       {/* Contact Form via FormSubmit */}
       <motion.form
-        action="https://formsubmit.co/harshithapathania9@gmail.com"
+        action="https://formsubmit.co/harshithapathania@gmail.com"
         method="POST"
         className="max-w-xl mx-auto space-y-6 text-left"
         initial={{ opacity: 0 }}
